@@ -94,7 +94,7 @@ if __name__ == '__main__':
     # Run the simulation for the specified number of ticks,
     # by running the host, then the link, then the pdbox
     for tick in range(0, args.ticks):
-      packets = host.send(tick, link)
+      packets = host.send(tick)
 
       if packets is not None:
           # If a single packet is received, convert it to list

@@ -85,6 +85,8 @@ class AimdHost:
         
         A list of packets that the host wants to transmit on to the network
     """
+    print ("@ tick " + str(tick) + " window is " + str(self.window))
+
     # TODO: Create an empty list of packets that the host will send
 
     # First, process retransmissions
@@ -116,6 +118,8 @@ class AimdHost:
       pass
       # TODO: Create new packets, set their retransmission timeout, and transmit them
       # TODO: Remember to update self.max_seq and add the just sent packet to self.unacked
+    
+    # TODO: Return the list of packets that need to be sent on to the network
 
   def recv(self, pkt, tick):
     """
