@@ -1,5 +1,6 @@
 # Required for dropping packets at random
 import random
+import queue
 
 class PropDelayBox:
   """
@@ -30,7 +31,7 @@ class Link:
 
   """
   def __init__(self, loss_ratio, queue_limit):
-    self.link_queue = []         # queue of packets at the link
+    self.link_queue = queue.Queue()# queue of packets at the link
     self.loss_ratio = loss_ratio # probability of dropping packets when link dequeues them
     self.queue_limit= queue_limit# Max size of queue in packets
   def recv(self, pkt):
@@ -43,8 +44,8 @@ class Link:
     packet on to the link. If link's queue is full, it starts dropping packets
     and does not receive any more packets.
     """
-    if (len(self.link_queue) < self.queue_limit):
-      self.link_queue += [pkt]   # append to the queue
+    if (self.link_queue.qsize() < self.queue_limit):
+      self.link_queue.put(pkt)   # append to the queue
     else:
       print ("Link dropped packet because queue_limit was exceeded")
   def tick(self, tick, pdbox):   # Execute on every tick
@@ -52,9 +53,8 @@ class Link:
     This function simulates what a link would do at each time instant (tick).
     It dequeue packets and sends it to the propogation delay box
     """
-    if (len(self.link_queue) != 0): # Dequeue from link queue if queue is not empty
-      head = self.link_queue[0]
-      self.link_queue = self.link_queue[1:] # Shifting list is equivalent to dequeuing it
+    if (self.link_queue.qsize() != 0): # Dequeue from link queue if queue is not empty
+      head = self.link_queue.get()
       if (random.uniform(0.0, 1) < (1 - self.loss_ratio)):
         pdbox.recv(head, tick)   # dequeue and send to prop delay box
       else:

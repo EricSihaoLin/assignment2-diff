@@ -141,6 +141,6 @@ class AimdHost:
     # TODO: Update in_order_rx_seq to reflect the largest sequence number that you
     # have received in order so far
 
-    # TODO: Increase your window on this ACK based on whether you are in slow start or not
-    # TODO: Remember this function is called on every ACK (not every RTT),
-    # so you should adjust your window accordingly.
+    # TODO: Increase your window given that you just received an ACK. Remember that:
+    # 1. The window increase rule is different for slow start and congestion avoidance.
+    # 2. The recv() function is called on every ACK (not every RTT), so you should adjust your window accordingly.
